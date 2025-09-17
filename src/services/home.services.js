@@ -1,32 +1,32 @@
 const db = require('../config/db.config');
 
 exports.findAll = async () => {
-    const [rows] = await db.execute('SELECT * FROM user');
+    const [rows] = await db.execute('SELECT * FROM home');
     return rows;
 };
 
-exports.findById = async (id) => {
-    const [rows] = await db.execute('SELECT * FROM user WHERE id = ?', [id]);
+exports.findById = async (idhome) => {
+    const [rows] = await db.execute('SELECT * FROM home WHERE idhome = ?', [idhome]);
     return rows[0];
 };
 
-exports.create = async (newUser) => {
+exports.create = async (newhome) => {
     const [result] = await db.execute(
-        'INSERT INTO user (nombre, correo) VALUES (?, ?)',
-        [newUser.nombre, newUser.correo]
+        'INSERT INTO home (conocenos, productos, contactanos) VALUES (?, ?, ?)',
+        [newhome.conocenos, newhome.productos, newhome.contactanos]
     );
-    return { id: result.insertId, ...newUser };
+    return { idhome: result.insertId, ...newhome };
 };
 
-exports.update = async (id, updatedUser) => {
+exports.update = async (idhome, updatedhome) => {
     const [result] = await db.execute(
-        'UPDATE user SET nombre = ?, correo = ? WHERE id = ?',
-        [updatedUser.nombre, updatedUser.correo, id]
+        'UPDATE home SET conocenos = ?, productos = ?, contactanos = ?, WHERE idhome = ?',
+        [updatedhome.conocenos, updatedhome.productos, updatedhome.contactanos, idhome]
     );
     return result.affectedRows > 0;
 };
 
 exports.remove = async (id) => {
-    const [result] = await db.execute('DELETE FROM user WHERE id = ?', [id]);
+    const [result] = await db.execute('DELETE FROM home WHERE idhome = ?', [idhome]);
     return result.affectedRows > 0;
 };
