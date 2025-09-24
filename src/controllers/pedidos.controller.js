@@ -1,4 +1,4 @@
-const pedidoService = require('../services/pedido.service');
+const pedidoService = require('../services/pedidos.service');
 
 exports.findAll = async (req, res) => {
     try {
