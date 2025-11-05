@@ -1,9 +1,9 @@
-const userService = require('../services/contactanos.service');
+const contactanosService = require('../services/contactanos.service');
 
 exports.findAll = async (req, res) => {
     try {
-        const users = await userService.findAll();
-        res.status(200).json(users);
+        const contactos = await contactanosService.findAll();
+        res.status(200).json(contactos);
     } catch (error) {
         res.status(500).json({ message: "Error al obtener contacto", error });
     }
@@ -11,11 +11,11 @@ exports.findAll = async (req, res) => {
 
 exports.findById = async (req, res) => {
     try {
-        const user = await userService.findById(req.params.id);
-        if (!user) {
+        const contacto = await contactanosService.findById(req.params.id);
+        if (!contacto) {
             return res.status(404).json({ message: "contacto no encontrado" });
         }
-        res.status(200).json(user);
+        res.status(200).json(contacto);
     } catch (error) {
         res.status(500).json({ message: "Error al obtener el contacto", error });
     }
@@ -23,8 +23,8 @@ exports.findById = async (req, res) => {
 
 exports.create = async (req, res) => {
     try {
-        const newUser = await userService.create(req.body);
-        res.status(201).json(newUser);
+        const nuevoContacto = await contactanosService.create(req.body);
+        res.status(201).json(nuevoContacto);
     } catch (error) {
         res.status(500).json({ message: "Error al crear contacto", error });
     }
@@ -32,7 +32,9 @@ exports.create = async (req, res) => {
 
 exports.update = async (req, res) => {
     try {
-        const updated = await userService.update(req.params.id, req.body);
+        // Se recomienda que el servicio devuelva el objeto actualizado,
+        // pero se mantiene la lógica de mensaje por coherencia con el original.
+        const updated = await contactanosService.update(req.params.id, req.body);
         if (!updated) {
             return res.status(404).json({ message: "contacto no encontrado" });
         }
@@ -44,7 +46,7 @@ exports.update = async (req, res) => {
 
 exports.remove = async (req, res) => {
     try {
-        const removed = await userService.remove(req.params.id);
+        const removed = await contactanosService.remove(req.params.id);
         if (!removed) {
             return res.status(404).json({ message: "Contacto no encontrado" });
         }

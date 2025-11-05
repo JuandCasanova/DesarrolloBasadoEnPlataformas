@@ -1,9 +1,9 @@
-const userService = require('../services/home.service');
+const homeService = require('../services/home.service');
 
 exports.findAll = async (req, res) => {
     try {
-        const users = await userService.findAll();
-        res.status(200).json(users);
+        const homeItems = await homeService.findAll();
+        res.status(200).json(homeItems);
     } catch (error) {
         res.status(500).json({ message: "Error al obtener home", error });
     }
@@ -11,11 +11,11 @@ exports.findAll = async (req, res) => {
 
 exports.findById = async (req, res) => {
     try {
-        const user = await userService.findById(req.params.id);
-        if (!user) {
+        const itemHome = await homeService.findById(req.params.id);
+        if (!itemHome) {
             return res.status(404).json({ message: "home no encontrado" });
         }
-        res.status(200).json(user);
+        res.status(200).json(itemHome);
     } catch (error) {
         res.status(500).json({ message: "Error al obtener el home", error });
     }
@@ -23,8 +23,8 @@ exports.findById = async (req, res) => {
 
 exports.create = async (req, res) => {
     try {
-        const newUser = await userService.create(req.body);
-        res.status(201).json(newUser);
+        const newItemHome = await homeService.create(req.body);
+        res.status(201).json(newItemHome);
     } catch (error) {
         res.status(500).json({ message: "Error al crear home", error });
     }
@@ -32,7 +32,7 @@ exports.create = async (req, res) => {
 
 exports.update = async (req, res) => {
     try {
-        const updated = await userService.update(req.params.id, req.body);
+        const updated = await homeService.update(req.params.id, req.body);
         if (!updated) {
             return res.status(404).json({ message: "home no encontrado" });
         }
@@ -44,12 +44,13 @@ exports.update = async (req, res) => {
 
 exports.remove = async (req, res) => {
     try {
-        const removed = await userService.remove(req.params.id);
+        const removed = await homeService.remove(req.params.id);
         if (!removed) {
             return res.status(404).json({ message: "home no encontrado" });
         }
         res.status(200).json({ message: "home eliminado exitosamente" });
     } catch (error) {
-        res.status(500).json({ message: "home al eliminar usuario", error });
+        // Corregido el mensaje de error de 'home al eliminar usuario'
+        res.status(500).json({ message: "Error al eliminar home", error }); 
     }
 };

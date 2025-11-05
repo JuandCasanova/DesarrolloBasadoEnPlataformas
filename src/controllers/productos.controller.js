@@ -1,9 +1,9 @@
-const userService = require('../services/productos.service');
+const productoService = require('../services/productos.service');
 
 exports.findAll = async (req, res) => {
     try {
-        const users = await userService.findAll();
-        res.status(200).json(users);
+        const productos = await productoService.findAll();
+        res.status(200).json(productos);
     } catch (error) {
         res.status(500).json({ message: "Error al obtener producto", error });
     }
@@ -11,11 +11,11 @@ exports.findAll = async (req, res) => {
 
 exports.findById = async (req, res) => {
     try {
-        const user = await userService.findById(req.params.id);
-        if (!user) {
+        const producto = await productoService.findById(req.params.id);
+        if (!producto) {
             return res.status(404).json({ message: "producto no encontrado" });
         }
-        res.status(200).json(user);
+        res.status(200).json(producto);
     } catch (error) {
         res.status(500).json({ message: "Error al obtener el producto", error });
     }
@@ -23,8 +23,8 @@ exports.findById = async (req, res) => {
 
 exports.create = async (req, res) => {
     try {
-        const newUser = await userService.create(req.body);
-        res.status(201).json(newUser);
+        const nuevoProducto = await productoService.create(req.body);
+        res.status(201).json(nuevoProducto);
     } catch (error) {
         res.status(500).json({ message: "Error al crear producto", error });
     }
@@ -32,7 +32,7 @@ exports.create = async (req, res) => {
 
 exports.update = async (req, res) => {
     try {
-        const updated = await userService.update(req.params.id, req.body);
+        const updated = await productoService.update(req.params.id, req.body);
         if (!updated) {
             return res.status(404).json({ message: "producto no encontrado" });
         }
@@ -44,7 +44,7 @@ exports.update = async (req, res) => {
 
 exports.remove = async (req, res) => {
     try {
-        const removed = await userService.remove(req.params.id);
+        const removed = await productoService.remove(req.params.id);
         if (!removed) {
             return res.status(404).json({ message: "producto no encontrado" });
         }
