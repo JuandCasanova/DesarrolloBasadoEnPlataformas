@@ -1,5 +1,23 @@
 const clienteService = require('../services/cliente.service');
 
+exports.getProfile = async (req, res) => {
+    const userId = req.user.id; 
+    
+    try {
+        const user = await clienteService.findById(userId);
+
+        if (!user) {
+            // Si el token es válido pero el usuario fue borrado (caso extremo)
+            return res.status(404).json({ message: 'Cliente no encontrado.' });
+        }
+        
+        return res.status(200).json(user);
+    } catch (error) {
+        console.error('Error al obtener perfil del cliente:', error);
+        return res.status(500).json({ message: 'Error interno del servidor al cargar el perfil.' });
+    }
+};
+
 exports.findAll = async (req, res) => {
     try {
         const clientes = await clienteService.findAll();

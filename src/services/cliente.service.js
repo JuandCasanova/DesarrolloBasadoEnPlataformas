@@ -5,9 +5,12 @@ exports.findAll = async () => {
     return rows;
 };
 
-exports.findById = async (id_cliente) => {
-    const [rows] = await db.execute('SELECT * FROM clientes WHERE id_cliente = ?', [id_cliente]);
-    return rows[0];
+exports.findById = async (id) => {
+    const [rows] = await db.execute(
+        'SELECT id_cliente, nombre, apellido, email, direccion, telefono, is_verified FROM clientes WHERE id_cliente = ?',
+        [id]
+    );
+        return rows[0];
 };
 
 exports.create = async (newCliente) => {
