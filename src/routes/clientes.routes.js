@@ -2,6 +2,8 @@ const express = require('express');
 const router = express.Router();
 const clientesController = require('../controllers/clientes.controller');
 
+
+router.get('/verify', clientesController.verifyAccount);
 router.get('/', clientesController.findAll);
 router.get('/:id', clientesController.findById);
 router.post('/', clientesController.create);

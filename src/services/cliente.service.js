@@ -11,10 +11,22 @@ exports.findById = async (id_cliente) => {
 };
 
 exports.create = async (newCliente) => {
+    const hashedPassword = bcrypts.hash(newCliente.contraseña,10);
+    const token = crypto.randomBytes(32).toString('hex');
     const [result] = await db.execute(
-        'INSERT INTO clientes (nombre, apellido, email, contraseña, direccion, telefono) VALUES (?, ?, ?, ?, ?, ?)',
-        [newCliente.nombre, newCliente.apellido, newCliente.email, newCliente.contraseña, newCliente.direccion, newCliente.telefono]
+        'INSERT INTO clientes (nombre, apellido, email, contraseña, direccion, telefono, is_verified, verification_token) VALUES (?, ? , ?, ?, ?, ?, ?, ?)',
+        [
+            newCliente.nombre, 
+            newCliente.apellido, 
+            newCliente.email, 
+            hashedPassword, 
+            newCliente.direccion, 
+            newCliente.telefono,
+            false,
+            token
+        ]
     );
+    await emailService.sendVerificationEmail(newCliente.email, token);
     return { id_cliente: result.insertId, ...newCliente };
 };
 
