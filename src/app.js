@@ -11,6 +11,7 @@ const app = express();
 const PORT = process.env.PORT || 3307;
 
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 // Prefijo de la API y montaje de las rutas
 app.use('/api/home', homeRoutes);
