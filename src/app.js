@@ -1,5 +1,3 @@
-// src/app.js
-
 const express = require('express');
 // ----------------------------------------------------
 // 1. CARGA DE VARIABLES DE ENTORNO (¡CRÍTICO!)
