@@ -77,14 +77,13 @@ exports.remove = async (req, res) => {
     }
 };
 exports.verifyAccount = async (req, res) => {
-    const { token } = req.query; // Obtener el token de la URL (ej: ?token=...)
+    const { token } = req.query; 
 
     if (!token) {
         return res.status(400).send('Token de verificación faltante.');
     }
 
     try {
-        // 1. Buscar el cliente con ese token
         const [rows] = await db.execute(
             'SELECT id_cliente FROM clientes WHERE verification_token = ?',
             [token]
@@ -96,13 +95,11 @@ exports.verifyAccount = async (req, res) => {
 
         const id_cliente = rows[0].id_cliente;
 
-        // 2. Marcar la cuenta como verificada y eliminar el token
         await db.execute(
             'UPDATE clientes SET is_verified = TRUE, verification_token = NULL WHERE id_cliente = ?',
             [id_cliente]
         );
 
-        // 3. Respuesta de éxito (Puedes redirigir al front-end)
         res.send('¡Cuenta verificada exitosamente! Ya puedes iniciar sesión.');
 
     } catch (error) {

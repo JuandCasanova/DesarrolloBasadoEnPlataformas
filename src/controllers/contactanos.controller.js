@@ -32,8 +32,6 @@ exports.create = async (req, res) => {
 
 exports.update = async (req, res) => {
     try {
-        // Se recomienda que el servicio devuelva el objeto actualizado,
-        // pero se mantiene la lógica de mensaje por coherencia con el original.
         const updated = await contactanosService.update(req.params.id, req.body);
         if (!updated) {
             return res.status(404).json({ message: "contacto no encontrado" });

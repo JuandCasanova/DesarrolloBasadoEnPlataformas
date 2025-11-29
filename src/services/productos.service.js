@@ -1,5 +1,13 @@
 const db = require('../config/db.config');
 
+const getValidCategoriaId = (categoriaValue) => {
+    const id = parseInt(categoriaValue, 10);
+    if (isNaN(id) || id <= 0) {
+        return 1; 
+    }
+    return id;
+};
+
 exports.findAll = async () => {
     const [rows] = await db.execute('SELECT * FROM Productos');
     return rows;
@@ -11,34 +19,59 @@ exports.findById = async (id_producto) => {
 };
 
 exports.create = async (newProductos) => {
-    const [result] = await db.execute(
-        // ÚLTIMO INTENTO: Volvemos a 'id_categoria' (minúsculas) como fue creada en el script de Python
-        'INSERT INTO Productos (nombre_producto, descripcion, precio, stock, id_categoria) VALUES (?, ?, ?, ?, ?)',
-        [
-            newProductos.nombre_producto, 
-            newProductos.descripcion, 
-            newProductos.precio, 
-            newProductos.stock, 
-            newProductos.id_categoria
-        ]
-    );
-    return { id_producto: result.insertId, ...newProductos };
+    const nombre = newProductos.nombre ?? null; 
+    const descripcion = newProductos.descripcion ?? null;
+    
+    const idCategoria = getValidCategoriaId(newProductos.categoria); 
+
+    try {
+        const [result] = await db.execute(
+            'INSERT INTO Productos (nombre, descripcion, precio, stock, id_categoria) VALUES (?, ?, ?, ?, ?)',
+            [
+                nombre, 
+                descripcion, 
+                newProductos.precio, 
+                newProductos.stock, 
+                idCategoria 
+            ]
+        );
+        return { 
+            id: result.insertId, 
+            nombre: nombre,
+            descripcion: descripcion,
+            precio: newProductos.precio,
+            stock: newProductos.stock,
+            categoria: idCategoria 
+        };
+    } catch (error) {
+        console.error("Error detallado en productos.service.js (create):", error);
+        throw error; 
+    }
 };
 
 exports.update = async (id_producto, updatedProductos) => {
-    const [result] = await db.execute(
-        // Estandarizado a 'id_categoria' (minúsculas)
-        'UPDATE Productos SET nombre_producto = ?, descripcion = ?, precio = ?, stock = ?, id_categoria = ? WHERE id_producto = ?',
-        [
-            updatedProductos.nombre_producto, 
-            updatedProductos.descripcion, 
-            updatedProductos.precio, 
-            updatedProductos.stock, 
-            updatedProductos.id_categoria,
-            id_producto
-        ]
-    );
-    return result.affectedRows > 0;
+    const nombre = updatedProductos.nombre ?? null; 
+    const descripcion = updatedProductos.descripcion ?? null;
+    
+    const idCategoria = getValidCategoriaId(updatedProductos.categoria);
+
+    try {
+        const [result] = await db.execute(
+            'UPDATE Productos SET nombre = ?, descripcion = ?, precio = ?, stock = ?, id_categoria = ? WHERE id_producto = ?',
+            [
+                nombre, 
+                descripcion, 
+                updatedProductos.precio, 
+                updatedProductos.stock, 
+                idCategoria,
+                id_producto
+            ]
+        );
+        return result.affectedRows > 0;
+    } catch (error) {
+        console.error("Error detallado en productos.service.js (update):", error);
+        throw error;
+    }
 };
 
 exports.remove = async (id_producto) => {

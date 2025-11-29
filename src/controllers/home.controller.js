@@ -50,7 +50,6 @@ exports.remove = async (req, res) => {
         }
         res.status(200).json({ message: "home eliminado exitosamente" });
     } catch (error) {
-        // Corregido el mensaje de error de 'home al eliminar usuario'
         res.status(500).json({ message: "Error al eliminar home", error }); 
     }
 };

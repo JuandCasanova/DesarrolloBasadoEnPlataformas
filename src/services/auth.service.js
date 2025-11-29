@@ -14,7 +14,7 @@ exports.register = async (name, email, password) => {
         const [result] = await db.execute(
             'INSERT INTO clientes (nombre, apellido, email, contraseña, direccion, telefono, is_verified, verification_token) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
             [
-                name, // Se usa 'name' recibido y se mapea a la columna 'nombre'
+                name,
                 null, 
                 email,
                 hashedPassword,

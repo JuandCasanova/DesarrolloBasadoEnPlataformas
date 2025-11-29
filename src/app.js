@@ -1,9 +1,5 @@
 const express = require('express');
-// ----------------------------------------------------
-// 1. CARGA DE VARIABLES DE ENTORNO (¡CRÍTICO!)
-// Debe ir antes de cualquier require que use process.env
 require('dotenv').config(); 
-// ----------------------------------------------------
 
 const homeRoutes = require('./routes/home.routes');
 const productosRoutes = require('./routes/productos.routes');
